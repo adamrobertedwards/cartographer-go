@@ -30,6 +30,11 @@ func main() {
 	graphMap.AddEdge("c", "a", 0.)
 
 	for id, n := range graphMap.Nodes {
-		fmt.Println("Node", id, n.Position, n.Edges)
+		fmt.Println("node", id, n.Position, n.Edges)
 	}
+
+	pathing := graph.BFS{}
+	costPath := pathing.CalculateCostPath(&graphMap, "b", "c")
+
+	fmt.Println("shortest path", costPath)
 }

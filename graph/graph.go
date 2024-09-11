@@ -4,6 +4,22 @@ import (
 	"fmt"
 )
 
+type IPathing interface {
+	ReconstructPath(goal string)
+	CalculateCostPath(graph Graph, start string, goal string, earlyExit bool) CostPath
+}
+
+type Pathing struct {
+	Queue   []string
+	Visited map[string]string
+}
+
+type CostPath struct {
+	moves int
+	cost  float64
+	path  []string
+}
+
 type Position struct {
 	X float64
 	Y float64
