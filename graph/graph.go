@@ -2,16 +2,36 @@ package graph
 
 import (
 	"fmt"
+	"slices"
 )
 
-type IPathing interface {
+type IPathingCommon interface {
 	ReconstructPath(goal string)
 	CalculateCostPath(graph Graph, start string, goal string, earlyExit bool) CostPath
 }
 
-type Pathing struct {
-	Queue   []string
+type PathingCommon struct {
 	Visited map[string]string
+	Costs   map[string]float64
+}
+
+func (p *PathingCommon) ReconstructPath(goal string) []string {
+	path := []string{}
+	current := goal
+
+	for current != "" {
+		_, ok := p.Visited[current]
+		if !ok {
+			break
+		}
+
+		path = append(path, current)
+		current = p.Visited[current]
+	}
+
+	slices.Reverse(path)
+
+	return path
 }
 
 type CostPath struct {

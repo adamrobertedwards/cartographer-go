@@ -23,6 +23,10 @@ func main() {
 		X: 2.,
 		Y: 2.,
 	})
+	graphMap.AddNode("d", graph.Position{
+		X: 1.,
+		Y: 3.,
+	})
 
 	graphMap.AddEdge("a", "b", 0.)
 	graphMap.AddEdge("a", "c", 0.)
@@ -33,8 +37,21 @@ func main() {
 		fmt.Println("node", id, n.Position, n.Edges)
 	}
 
-	pathing := graph.BFS{}
-	costPath := pathing.CalculateCostPath(&graphMap, "b", "c")
+	pathingBFS := graph.BFS{}
+	costPath := pathingBFS.CalculateCostPath(&graphMap, "b", "c")
 
-	fmt.Println("shortest path", costPath)
+	fmt.Println("BFS: shortest path", costPath)
+
+	graphMap.AddEdge("a", "b", 0.)
+	graphMap.AddEdge("a", "c", 2.)
+	graphMap.AddEdge("b", "a", 4.)
+	graphMap.AddEdge("b", "c", 10.)
+	graphMap.AddEdge("c", "a", 0.)
+	graphMap.AddEdge("b", "d", 0.)
+	graphMap.AddEdge("d", "c", 15.)
+
+	pathingDijkstra := graph.Dijkstra{}
+	costPath = pathingDijkstra.CalculateCostPath(&graphMap, "b", "c")
+
+	fmt.Println("Dijkstra: shortest path", costPath)
 }
