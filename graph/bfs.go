@@ -5,7 +5,7 @@ type BFS struct {
 	PathingCommon
 }
 
-func (a *BFS) CalculateCostPath(graph *Graph, start string, goal string) CostPath {
+func (a *BFS) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
 	a.Queue = []string{start}
 	a.Visited = map[string]string{
 		start: "",
@@ -39,8 +39,8 @@ func (a *BFS) CalculateCostPath(graph *Graph, start string, goal string) CostPat
 	}
 
 	path := a.ReconstructPath(goal)
-	moves := len(path)
+	moves := len(path) - 1
 	cost := 0.
 
-	return CostPath{moves, cost, path}
+	return CostPath{moves, cost, path}, nil
 }

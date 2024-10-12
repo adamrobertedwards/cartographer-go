@@ -10,7 +10,7 @@ type Dijkstra struct {
 	PathingCommon
 }
 
-func (d Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) CostPath {
+func (d Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
 	d.Queue = priority_queue.PriorityQueue{MaxHeap: false}
 
 	item := priority_queue.QueueItem{
@@ -65,12 +65,13 @@ func (d Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) Cos
 	}
 
 	path := d.ReconstructPath(goal)
-	moves := len(path)
+	// -1 because we don't count the starting node
+	moves := len(path) - 1
 	cost := d.Costs[goal]
 
 	return CostPath{
 		moves,
 		cost,
 		path,
-	}
+	}, nil
 }

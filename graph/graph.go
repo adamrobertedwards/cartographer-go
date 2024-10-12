@@ -6,15 +6,16 @@ import (
 )
 
 type IPathingCommon interface {
-	ReconstructPath(goal string)
-	CalculateCostPath(graph Graph, start string, goal string, earlyExit bool) CostPath
+	CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error)
 }
 
+// PathingCommon is a struct that contains shared fields; Visited, Costs, which are shared between pathfinding algorithms.
 type PathingCommon struct {
 	Visited map[string]string
 	Costs   map[string]float64
 }
 
+// ReconstructPath is a function that returns an array of visited node ids to reach the goal.
 func (p *PathingCommon) ReconstructPath(goal string) []string {
 	path := []string{}
 	current := goal
@@ -50,11 +51,12 @@ type Node struct {
 	Edges    map[string]float64
 }
 
+// Graph is a struct that contains all graph nodes and their edges.
 type Graph struct {
 	Nodes map[string]Node
 }
 
-// Create a node and add it to the graph
+// AddNode is a function to add a Node to the Graph.
 func (g *Graph) AddNode(id string, position Position) Node {
 	v, exists := g.Nodes[id]
 
@@ -72,6 +74,7 @@ func (g *Graph) AddNode(id string, position Position) Node {
 	return g.Nodes[id]
 }
 
+// RemoveNode is a function to remove an existing Node from the Graph and any references to the Node in other Node edges.
 func (g *Graph) RemoveNode(id string) error {
 	_, exists := g.Nodes[id]
 
@@ -97,19 +100,13 @@ func (g *Graph) RemoveNode(id string) error {
 	return nil
 }
 
-func (g *Graph) AddEdge(from string, to string, weight float64) error {
+// AddEdge is a function to connect two Nodes together, with an optional weight.
+func (g Graph) AddEdge(from string, to string, weight float64) error {
 	fromNode, fromExists := g.Nodes[from]
 	_, toExists := g.Nodes[to]
 
-	nodes := map[string]bool{
-		from: fromExists,
-		to:   toExists,
-	}
-
-	for id, exists := range nodes {
-		if !exists {
-			return fmt.Errorf(`AddEdge: Node %s does not exist in the graph`, id)
-		}
+	if !fromExists || !toExists {
+		return fmt.Errorf(`AddEdge: unable to add edge between nodes because one or both do not exist in the graph`)
 	}
 
 	fromNode.Edges[to] = weight
