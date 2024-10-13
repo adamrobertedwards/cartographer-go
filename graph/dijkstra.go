@@ -10,7 +10,7 @@ type Dijkstra struct {
 	PathingCommon
 }
 
-func (d Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
+func (d *Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
 	d.Queue = priority_queue.PriorityQueue{MaxHeap: false}
 
 	item := priority_queue.QueueItem{

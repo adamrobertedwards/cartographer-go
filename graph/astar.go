@@ -13,21 +13,26 @@ type AStar struct {
 	PathingCommon
 }
 
-func (a AStar) CalculateHeuristicCost(from, goal *Node) float64 {
+func (a *AStar) CalculateHeuristicCost(from, goal *Node) float64 {
 	if a.DistanceType == Manhattan {
 		manhattan := &ManhattanDistance{}
 		return manhattan.CalculateDistance(from, goal)
+	}
+
+	if a.DistanceType == Euclidean {
+		euclidean := &EuclideanDistance{}
+		return euclidean.CalculateDistance(from, goal)
 	}
 
 	return 0.
 }
 
 // SetDistanceForHeuristic is a function to set the distance for the heuristic function e.g. manhattan distance.
-func (a AStar) SetDistanceForHeuristic(distance DistanceType) {
+func (a *AStar) SetDistanceForHeuristic(distance DistanceType) {
 	a.DistanceType = distance
 }
 
-func (a AStar) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
+func (a *AStar) CalculateCostPath(graph *Graph, start string, goal string) (CostPath, error) {
 	a.Queue = priority_queue.PriorityQueue{MaxHeap: false}
 
 	item := priority_queue.QueueItem{

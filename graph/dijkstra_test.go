@@ -4,27 +4,38 @@ import (
 	"testing"
 )
 
+type testCaseDijkstra struct {
+	directions    int
+	expectedMoves int
+	expectedCost  float64
+}
+
 func TestCalculateCostPathDijkstra(t *testing.T) {
-	grid, err := createGraphGridFromSlice(gridSlice)
-
-	if err != nil {
-		t.Errorf(`Dijkstra.CalculateCostPath: Graph could not be created: %v`, err.Error())
+	testCases := []testCaseDijkstra{
+		{directions: 4, expectedMoves: 8, expectedCost: 9.},
+		{directions: 8, expectedMoves: 6, expectedCost: 6.},
 	}
 
-	pathing := Dijkstra{}
-	costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "4,4")
-	expectedMoves := 8
-	expectedCost := 9.
+	for _, test := range testCases {
+		grid, err := createGraphGridFromSlice(gridSlice, test.directions)
 
-	if costError != nil {
-		t.Errorf(`Dijkstra.CalculateCostPath: the cost path could not be calculated: %v`, costError.Error())
-	}
+		if err != nil {
+			t.Errorf(`Dijkstra.CalculateCostPath: Graph could not be created: %v`, err.Error())
+		}
 
-	if costPath.moves != expectedMoves {
-		t.Errorf(`Dijkstra.CalculateCostPath: the calculated moves were incorrect. expected: %v, got: %v`, expectedMoves, costPath.moves)
-	}
+		pathing := Dijkstra{}
+		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "4,4")
 
-	if costPath.cost != expectedCost {
-		t.Errorf(`Dijkstra.CalculateCostPath: the calculated cost was incorrect. expected: %v, got: %v`, expectedCost, costPath.cost)
+		if costError != nil {
+			t.Errorf(`Dijkstra.CalculateCostPath: the cost path could not be calculated: %v`, costError.Error())
+		}
+
+		if costPath.moves != test.expectedMoves {
+			t.Errorf(`Dijkstra.CalculateCostPath: the calculated moves were incorrect. expected: %v, got: %v`, test.expectedMoves, costPath.moves)
+		}
+
+		if costPath.cost != test.expectedCost {
+			t.Errorf(`Dijkstra.CalculateCostPath: the calculated cost was incorrect. expected: %v, got: %v`, test.expectedCost, costPath.cost)
+		}
 	}
 }

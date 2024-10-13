@@ -7,16 +7,21 @@ import (
 
 var gridSlice [][]int = [][]int{
 	{1, 2, 1, 3, 1},
-	{1, 3, 1, 1, 1},
+	{1, 2, 1, 1, 1},
 	{1, 0, 2, 0, 1},
 	{2, 1, 1, 1, 3},
 	{1, 1, 0, 1, 1},
 }
 
 // createGraphGridFromSlice takes a multidimensional slice, with the values being the cost to visit the node.
-func createGraphGridFromSlice(slice [][]int) (Graph, error) {
+func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 	if len(slice) == 0 {
 		return Graph{}, errors.New("the provided slice was empty")
+	}
+
+	// On a grid, only support 4 or 8 way movement
+	if directions != 4 && directions != 8 {
+		return Graph{}, errors.New("the provided value for directions must be 4 or 8")
 	}
 
 	nodes := make(map[string]Node)
@@ -55,6 +60,7 @@ func createGraphGridFromSlice(slice [][]int) (Graph, error) {
 			}
 		}
 
+		// Add edges for 4 way movement
 		if (col + 1) <= numCols-1 {
 			next := slice[row][col+1]
 
@@ -76,6 +82,41 @@ func createGraphGridFromSlice(slice [][]int) (Graph, error) {
 
 			if next != 0 {
 				grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col), float64(next))
+			}
+		}
+
+		// Handle edges for 8 way movement
+		if directions == 8 {
+			if (col-1) >= 0 && (row-1) >= 0 {
+				node := slice[row-1][col-1]
+
+				if node != 0 {
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col-1), float64(node))
+				}
+			}
+
+			if (col+1) <= numCols-1 && (row-1) >= 0 {
+				node := slice[row-1][col+1]
+
+				if node != 0 {
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col+1), float64(node))
+				}
+			}
+
+			if (col-1) >= 0 && (row+1) <= numRows-1 {
+				node := slice[row+1][col-1]
+
+				if node != 0 {
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col-1), float64(node))
+				}
+			}
+
+			if (col+1) <= numCols-1 && (row+1) <= numRows-1 {
+				node := slice[row+1][col+1]
+
+				if node != 0 {
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col+1), float64(node))
+				}
 			}
 		}
 	}
