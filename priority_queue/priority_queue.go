@@ -3,7 +3,7 @@ package priority_queue
 type QueueItem struct {
 	// It's more efficient to store the index as a field vs traversing the heap to get the index explicitly
 	Index    int
-	Priority float64
+	Priority int
 	Value    string
 }
 

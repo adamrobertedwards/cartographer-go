@@ -40,7 +40,7 @@ func (a *BFS) CalculateCostPath(graph *Graph, start string, goal string) (CostPa
 
 	path := a.ReconstructPath(goal)
 	moves := len(path) - 1
-	cost := 0.
+	cost := 0
 
 	return CostPath{moves, cost, path}, nil
 }

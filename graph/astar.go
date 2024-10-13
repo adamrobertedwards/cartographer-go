@@ -13,10 +13,15 @@ type AStar struct {
 	PathingCommon
 }
 
-func (a *AStar) CalculateHeuristicCost(from, goal *Node) float64 {
+func (a *AStar) CalculateHeuristicCost(from, goal *Node) int {
 	if a.DistanceType == Manhattan {
 		manhattan := &ManhattanDistance{}
 		return manhattan.CalculateDistance(from, goal)
+	}
+
+	if a.DistanceType == Chebyshev {
+		chebyshev := &ChebyshevDistance{}
+		return chebyshev.CalculateDistance(from, goal)
 	}
 
 	if a.DistanceType == Euclidean {
@@ -45,7 +50,7 @@ func (a *AStar) CalculateCostPath(graph *Graph, start string, goal string) (Cost
 	a.Visited = map[string]string{
 		start: "",
 	}
-	a.Costs = map[string]float64{
+	a.Costs = map[string]int{
 		start: 0,
 	}
 

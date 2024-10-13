@@ -8,16 +8,16 @@ type testCase struct {
 	directions    int
 	distanceType  DistanceType
 	expectedMoves int
-	expectedCost  float64
+	expectedCost  int
 }
 
 // TestCalculateCostPathAStar is a unit test for testing each supported distance heuristic for the AStar algorithm.
 func TestCalculateCostPathAStar(t *testing.T) {
 	testCases := []testCase{
-		{directions: 4, distanceType: Manhattan, expectedMoves: 8, expectedCost: 9.},
-		{directions: 8, distanceType: Manhattan, expectedMoves: 6, expectedCost: 6.},
-		{directions: 4, distanceType: Euclidean, expectedMoves: 8, expectedCost: 9.},
-		{directions: 8, distanceType: Euclidean, expectedMoves: 6, expectedCost: 6.},
+		{directions: 4, distanceType: Manhattan, expectedMoves: 18, expectedCost: 19},
+		{directions: 4, distanceType: Chebyshev, expectedMoves: 18, expectedCost: 19},
+		{directions: 4, distanceType: Euclidean, expectedMoves: 18, expectedCost: 19},
+		{directions: 8, distanceType: Euclidean, expectedMoves: 12, expectedCost: 12},
 	}
 
 	for _, test := range testCases {
@@ -28,7 +28,7 @@ func TestCalculateCostPathAStar(t *testing.T) {
 		}
 
 		pathing := AStar{DistanceType: test.distanceType}
-		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "4,4")
+		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "9,9")
 
 		if costError != nil {
 			t.Errorf(`AStar.CalculateCostPath: the cost path could not be calculated with %v : %v`, test.distanceType, costError.Error())

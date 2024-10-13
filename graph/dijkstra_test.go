@@ -7,13 +7,13 @@ import (
 type testCaseDijkstra struct {
 	directions    int
 	expectedMoves int
-	expectedCost  float64
+	expectedCost  int
 }
 
 func TestCalculateCostPathDijkstra(t *testing.T) {
 	testCases := []testCaseDijkstra{
-		{directions: 4, expectedMoves: 8, expectedCost: 9.},
-		{directions: 8, expectedMoves: 6, expectedCost: 6.},
+		{directions: 4, expectedMoves: 18, expectedCost: 19},
+		{directions: 8, expectedMoves: 12, expectedCost: 12},
 	}
 
 	for _, test := range testCases {
@@ -24,7 +24,7 @@ func TestCalculateCostPathDijkstra(t *testing.T) {
 		}
 
 		pathing := Dijkstra{}
-		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "4,4")
+		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "9,9")
 
 		if costError != nil {
 			t.Errorf(`Dijkstra.CalculateCostPath: the cost path could not be calculated: %v`, costError.Error())

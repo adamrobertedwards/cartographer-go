@@ -3,14 +3,20 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 var gridSlice [][]int = [][]int{
-	{1, 2, 1, 3, 1},
-	{1, 2, 1, 1, 1},
-	{1, 0, 2, 0, 1},
-	{2, 1, 1, 1, 3},
-	{1, 1, 0, 1, 1},
+	{1, 2, 1, 3, 1, 1, 2, 0, 1, 1},
+	{1, 2, 1, 1, 1, 2, 1, 1, 1, 0},
+	{1, 0, 2, 0, 1, 1, 1, 2, 3, 1},
+	{2, 1, 1, 1, 3, 2, 1, 1, 1, 1},
+	{1, 1, 0, 1, 1, 0, 2, 1, 1, 1},
+	{1, 2, 1, 3, 1, 1, 2, 1, 1, 1},
+	{1, 2, 1, 1, 1, 2, 1, 1, 1, 0},
+	{1, 0, 2, 1, 1, 1, 1, 2, 1, 1},
+	{2, 1, 1, 1, 3, 2, 1, 1, 1, 1},
+	{1, 1, 0, 1, 1, 0, 2, 1, 1, 1},
 }
 
 // createGraphGridFromSlice takes a multidimensional slice, with the values being the cost to visit the node.
@@ -31,6 +37,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 
 	numRows := len(slice)
 	numCols := 0
+	diagonalCost := int(math.Sqrt(2))
 
 	for row, cols := range slice {
 		numCols = len(cols)
@@ -56,7 +63,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 			prev := slice[row][col-1]
 
 			if prev != 0 {
-				grid.AddEdge(key, fmt.Sprintf("%v,%v", row, col-1), float64(prev))
+				grid.AddEdge(key, fmt.Sprintf("%v,%v", row, col-1), prev)
 			}
 		}
 
@@ -65,7 +72,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 			next := slice[row][col+1]
 
 			if next != 0 {
-				grid.AddEdge(key, fmt.Sprintf("%v,%v", row, col+1), float64(next))
+				grid.AddEdge(key, fmt.Sprintf("%v,%v", row, col+1), next)
 			}
 		}
 
@@ -73,7 +80,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 			prev := slice[row-1][col]
 
 			if prev != 0 {
-				grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col), float64(prev))
+				grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col), prev)
 			}
 		}
 
@@ -81,7 +88,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 			next := slice[row+1][col]
 
 			if next != 0 {
-				grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col), float64(next))
+				grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col), next)
 			}
 		}
 
@@ -91,7 +98,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 				node := slice[row-1][col-1]
 
 				if node != 0 {
-					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col-1), float64(node))
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col-1), node*diagonalCost)
 				}
 			}
 
@@ -99,7 +106,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 				node := slice[row-1][col+1]
 
 				if node != 0 {
-					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col+1), float64(node))
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row-1, col+1), node*diagonalCost)
 				}
 			}
 
@@ -107,7 +114,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 				node := slice[row+1][col-1]
 
 				if node != 0 {
-					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col-1), float64(node))
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col-1), node*diagonalCost)
 				}
 			}
 
@@ -115,7 +122,7 @@ func createGraphGridFromSlice(slice [][]int, directions int) (Graph, error) {
 				node := slice[row+1][col+1]
 
 				if node != 0 {
-					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col+1), float64(node))
+					grid.AddEdge(key, fmt.Sprintf("%v,%v", row+1, col+1), node*diagonalCost)
 				}
 			}
 		}

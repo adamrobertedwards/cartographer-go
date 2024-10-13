@@ -11,8 +11,8 @@ type testCaseBFS struct {
 
 func TestCalculateCostPathBFS(t *testing.T) {
 	testCases := []testCaseBFS{
-		{directions: 4, expectedMoves: 8},
-		{directions: 8, expectedMoves: 4},
+		{directions: 4, expectedMoves: 18},
+		{directions: 8, expectedMoves: 9},
 	}
 
 	for _, test := range testCases {
@@ -23,7 +23,7 @@ func TestCalculateCostPathBFS(t *testing.T) {
 		}
 
 		pathing := BFS{}
-		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "4,4")
+		costPath, costError := pathing.CalculateCostPath(&grid, "0,0", "9,9")
 
 		if costError != nil {
 			t.Errorf(`BFS.CalculateCostPath: the cost path could not be calculated: %v`, costError.Error())

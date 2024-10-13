@@ -12,7 +12,7 @@ type IPathingCommon interface {
 // PathingCommon is a struct that contains shared fields; Visited, Costs, which are shared between pathfinding algorithms.
 type PathingCommon struct {
 	Visited map[string]string
-	Costs   map[string]float64
+	Costs   map[string]int
 }
 
 // ReconstructPath is a function that returns an array of visited node ids to reach the goal.
@@ -37,7 +37,7 @@ func (p *PathingCommon) ReconstructPath(goal string) []string {
 
 type CostPath struct {
 	moves int
-	cost  float64
+	cost  int
 	path  []string
 }
 
@@ -48,7 +48,7 @@ type Position struct {
 
 type Node struct {
 	Position Position
-	Edges    map[string]float64
+	Edges    map[string]int
 }
 
 // Graph is a struct that contains all graph nodes and their edges.
@@ -64,7 +64,7 @@ func (g *Graph) AddNode(id string, position Position) Node {
 		return v
 	}
 
-	edges := make(map[string]float64)
+	edges := make(map[string]int)
 
 	g.Nodes[id] = Node{
 		Position: position,
@@ -101,7 +101,7 @@ func (g *Graph) RemoveNode(id string) error {
 }
 
 // AddEdge is a function to connect two Nodes together, with an optional weight.
-func (g Graph) AddEdge(from string, to string, weight float64) error {
+func (g Graph) AddEdge(from string, to string, weight int) error {
 	fromNode, fromExists := g.Nodes[from]
 	_, toExists := g.Nodes[to]
 

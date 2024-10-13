@@ -23,7 +23,7 @@ func (d *Dijkstra) CalculateCostPath(graph *Graph, start string, goal string) (C
 	d.Visited = map[string]string{
 		start: "",
 	}
-	d.Costs = map[string]float64{
+	d.Costs = map[string]int{
 		start: 0,
 	}
 
